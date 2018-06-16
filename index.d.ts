@@ -1,8 +1,9 @@
 declare module 'pex-context';
 
 declare namespace pex {
+
   export interface Context {
-    gl: WebGLRenderingContext;
+    // GL enums
     BlendFactor: BlendFactor;
     CubemapFace: CubemapFace;
     DepthFunc: DepthFunc;
@@ -16,22 +17,99 @@ declare namespace pex {
     Wrap: Wrap;
     QueryTarget: QueryTarget;
     QueryState: QueryState;
-    frame: (fn: () => void) => void;
+
+    // stored properties
+    gl: WebGLRenderingContext;
+    debugMode: boolean;
+    capabilities: {
+      instancing: boolean,
+      maxColorAttachments: number,
+    };
+    debugCommands: Array<Command>;
+    resources: Array<Resource>;
+    queries: Array<Query>;
+    stack: Array<State>;
+    defaultState: State;
+    state: State;
+
+    // API functions
+    getGLString(glEnum: number): string;
+    debug(enabled: boolean): void;
+    checkError(): void;
+    resource(res: Resource): Resource;
+    texture2D(opts: {}): Texture;
+    textureCube(opts: {}): Texture;
+    framebuffer(opts: {}): Framebuffer;
+    vertexBuffer(opts: {}): Buffer;
+    indexBuffer(opts: {}): Buffer;
+    program(opts: { vert: string, frag: string }): Program;
+    pipeline(opts: {}): Pipeline;
+    pass(opts: {}): Pass;
+    query(opts: {}): Query;
+    beginQuery(q: Query): void;
+    endQuery(q: Query): void;
+    readPixels(opts: { x: number, y: number, width: number, height: number }): Uint8Array;
+    frame(fn: () => void): void;
+    submit(cmd: Command, batches?: Array<Command> | Command, subCommand?: () => void): void;
+  }
+
+  export interface Command {
+    name?: string;
+    pass?: Pass;
+    pipeline?: Pipeline;
+    uniforms?: Object;
+    attributes?: Object;
+    indices?: Object;
+    count?: number;
+    instances?: number;
+    viewport?: Array<number>;
+    scissor?: Array<number>;
+  }
+
+  export interface State {
+    pass: Pass;
+    pipeline: Pipeline;
+    viewport: Array<number>;
+    scissor: Array<number> | null;
+    count: number;
   }
 
   export interface Framebuffer {}
 
-  export interface Pass {}
+  export interface Attribute {
+    name: string;
+    type: ShaderDataType.FLOAT | ShaderDataType.FLOAT_VEC2 | ShaderDataType.FLOAT_VEC3 | ShaderDataType.FLOAT_VEC4 | ShaderDataType.FLOAT_MAT4;
+    size: number;
+    location: number;
+  }
 
-  export interface Pipeline {}
+  export interface Uniform {
+    name: string;
+    type: ShaderDataType;
+    size: number;
+    location: number;
+  }
 
-  export interface Program {}
+  export interface Program {
+    class: 'program';
+    handle: number;
+    uniforms: { [key: string]: Uniform }
+    attributes: { [key: string]: Attribute };
+    attributesPerLocation: { [key: number]: Attribute };
+    setUniform(name: string, value: number | Array<number>): void;
+  }
 
   export interface Buffer {}
 
   export interface Texture {}
 
+  export interface Pipeline {}
+
+  export interface Pass {}
+
   export interface Query {}
+
+  type Resource = Framebuffer | Program | Buffer | Texture | Pipeline | Pass | Query;
 
   enum BlendFactor {
     One = 1,
@@ -71,6 +149,20 @@ declare namespace pex {
     Uint8 = 5121,
     Uint16 = 5123,
     Uint32 = 5125,
+  }
+
+  enum ShaderDataType {
+    INT = 5124,
+    BOOL = 35670,
+    FLOAT = 5126,
+    FLOAT_VEC2 = 35664,
+    FLOAT_VEC3 = 35665,
+    FLOAT_VEC4 = 35666,
+    FLOAT_MAT2 = 35674,
+    FLOAT_MAT3 = 35675,
+    FLOAT_MAT4 = 35676,
+    SAMPLER_2D = 35678,
+    SAMPLER_CUBE = 35680,
   }
 
   enum Face {
@@ -132,6 +224,7 @@ declare namespace pex {
     Active = 'active',
     Pending = 'pending'
   }
+
 }
 
 declare function pex(opts: {} | HTMLCanvasElement): pex.Context;
