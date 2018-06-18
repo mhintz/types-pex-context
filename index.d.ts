@@ -36,12 +36,11 @@ declare namespace pex {
     getGLString(glEnum: number): string;
     debug(enabled: boolean): void;
     checkError(): void;
-    resource(res: Resource): Resource;
     texture2D(opts: {}): Texture;
     textureCube(opts: {}): Texture;
     framebuffer(opts: {}): Framebuffer;
-    vertexBuffer(opts: {}): Buffer;
-    indexBuffer(opts: {}): Buffer;
+    vertexBuffer(opts: { data: Float32Array, usage?: Usage } | Float32Array): Buffer;
+    indexBuffer(opts: { data: Uint16Array | Uint32Array, usage?: Usage } | Uint16Array | Uint32Array): Buffer;
     program(opts: { vert: string, frag: string }): Program;
     pipeline(opts: {}): Pipeline;
     pass(opts: {}): Pass;
@@ -99,7 +98,12 @@ declare namespace pex {
     setUniform(name: string, value: number | Array<number>): void;
   }
 
-  export interface Buffer {}
+  export interface Buffer {
+    class: 'vertexBuffer' | 'indexBuffer';
+    handle: number;
+    target: BufferTarget;
+    usage: Usage;
+  }
 
   export interface Texture {}
 
@@ -223,6 +227,11 @@ declare namespace pex {
     Ready = 'ready',
     Active = 'active',
     Pending = 'pending'
+  }
+
+  enum BufferTarget {
+    ARRAY_BUFFER = 34962,
+    ELEMENT_ARRAY_BUFFER = 34963,
   }
 
 }
