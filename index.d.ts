@@ -4,19 +4,19 @@ declare namespace pex {
 
   export interface Context {
     // GL enums
-    BlendFactor: BlendFactor;
-    CubemapFace: CubemapFace;
-    DepthFunc: DepthFunc;
-    DataType: DataType;
-    Face: Face;
-    Filter: Filter;
-    PixelFormat: PixelFormat;
-    Encoding: Encoding;
-    Primitive: Primitive;
-    Usage: Usage;
-    Wrap: Wrap;
-    QueryTarget: QueryTarget;
-    QueryState: QueryState;
+    BlendFactor: typeof BlendFactor;
+    CubemapFace: typeof CubemapFace;
+    DepthFunc: typeof DepthFunc;
+    DataType: typeof DataType;
+    Face: typeof Face;
+    Filter: typeof Filter;
+    PixelFormat: typeof PixelFormat;
+    Encoding: typeof Encoding;
+    Primitive: typeof Primitive;
+    Usage: typeof Usage;
+    Wrap: typeof Wrap;
+    QueryTarget: typeof QueryTarget;
+    QueryState: typeof QueryState;
 
     // stored properties
     gl: WebGLRenderingContext;
@@ -91,7 +91,7 @@ declare namespace pex {
 
   export interface Program {
     class: 'program';
-    handle: number;
+    handle: WebGLProgram;
     uniforms: { [key: string]: Uniform }
     attributes: { [key: string]: Attribute };
     attributesPerLocation: { [key: number]: Attribute };
@@ -100,7 +100,7 @@ declare namespace pex {
 
   export interface Buffer {
     class: 'vertexBuffer' | 'indexBuffer';
-    handle: number;
+    handle: WebGLBuffer;
     target: BufferTarget;
     usage: Usage;
   }
@@ -115,7 +115,7 @@ declare namespace pex {
 
   type Resource = Framebuffer | Program | Buffer | Texture | Pipeline | Pass | Query;
 
-  enum BlendFactor {
+  export enum BlendFactor {
     One = 1,
     Zero = 0,
     SrcAlpha = 770,
@@ -128,7 +128,7 @@ declare namespace pex {
     OneMinusDstColor = 775,
   }
 
-  enum CubemapFace {
+  export enum CubemapFace {
     NegativeX = 34070,
     NegativeY = 34072,
     NegativeZ = 34074,
@@ -137,7 +137,7 @@ declare namespace pex {
     PositiveZ = 34073,
   }
 
-  enum DepthFunc {
+  export enum DepthFunc {
     Always = 519,
     Equal = 514,
     Greater = 516,
@@ -148,14 +148,14 @@ declare namespace pex {
     NotEqual = 517,
   }
 
-  enum DataType {
+  export enum DataType {
     Float32 = 5126,
     Uint8 = 5121,
     Uint16 = 5123,
     Uint32 = 5125,
   }
 
-  enum ShaderDataType {
+  export enum ShaderDataType {
     INT = 5124,
     BOOL = 35670,
     FLOAT = 5126,
@@ -169,13 +169,13 @@ declare namespace pex {
     SAMPLER_CUBE = 35680,
   }
 
-  enum Face {
+  export enum Face {
     Back = 1029,
     Front = 1028,
     FrontAndBack = 1032,
   }
 
-  enum Filter {
+  export enum Filter {
     Linear = 9729,
     LinearMipmapLinear = 9987,
     LinearMipmapNearest = 9985,
@@ -184,7 +184,7 @@ declare namespace pex {
     NearestMipmapNearest = 9984,
   }
 
-  enum PixelFormat {
+  export enum PixelFormat {
     RGBA8 = 'rgba8', // gl.RGBA + gl.UNSIGNED_BYTE
     RGBA32F = 'rgba32f', // gl.RGBA + gl.FLOAT
     RGBA16F = 'rgba16f', // gl.RGBA + gl.HALF_FLOAT
@@ -193,14 +193,14 @@ declare namespace pex {
     Depth = 'depth' // gl.DEPTH_COMPONENT
   }
 
-  enum Encoding {
+  export enum Encoding {
     Linear = 1,
     Gamma = 2,
     SRGB = 3,
     RGBM = 4
   }
 
-  enum Primitive {
+  export enum Primitive {
     LineStrip = 3,
     Lines = 1,
     Points = 0,
@@ -208,28 +208,28 @@ declare namespace pex {
     Triangles = 4,
   }
 
-  enum Usage {
+  export enum Usage {
     DynamicDraw = 35048,
     StaticDraw = 35044,
     StreamDraw = 35040,
   }
 
-  enum Wrap {
+  export enum Wrap {
     ClampToEdge = 33071,
     Repeat = 10497,
   }
 
-  enum QueryTarget {
+  export enum QueryTarget {
     TimeElapsed = 35007
   }
 
-  enum QueryState {
+  export enum QueryState {
     Ready = 'ready',
     Active = 'active',
     Pending = 'pending'
   }
 
-  enum BufferTarget {
+  export enum BufferTarget {
     ARRAY_BUFFER = 34962,
     ELEMENT_ARRAY_BUFFER = 34963,
   }
