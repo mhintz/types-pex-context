@@ -42,7 +42,7 @@ declare namespace pex {
     vertexBuffer(opts: { data: Float32Array, usage?: Usage } | Float32Array): Buffer;
     indexBuffer(opts: { data: Uint16Array | Uint32Array, usage?: Usage } | Uint16Array | Uint32Array): Buffer;
     program(opts: { vert: string, frag: string }): Program;
-    pipeline(opts: {}): Pipeline;
+    pipeline(opts: { vert?: string, frag?: string, program?: Program, depthWrite?: boolean, depthTest?: boolean, depthFunc?: DepthFunc, blend?: boolean, blendSrcRGBFactor?: BlendFactor, blendSrcAlphaFactor?: BlendFactor, blendDstRGBFactor?: BlendFactor, blendDstAlphaFactor?: BlendFactor, cullFace?: boolean, cullFaceMode?: Face, colorMask?: [boolean, boolean, boolean, boolean], primitive?: Primitive }): Pipeline;
     pass(opts: {}): Pass;
     query(opts: {}): Query;
     beginQuery(q: Query): void;
@@ -107,7 +107,23 @@ declare namespace pex {
 
   export interface Texture {}
 
-  export interface Pipeline {}
+  export interface Pipeline {
+    vert?: string,
+    frag?: string,
+    program?: Program,
+    depthWrite?: boolean,
+    depthTest?: boolean,
+    depthFunc?: DepthFunc,
+    blend?: boolean,
+    blendSrcRGBFactor?: BlendFactor,
+    blendSrcAlphaFactor?: BlendFactor,
+    blendDstRGBFactor?: BlendFactor,
+    blendDstAlphaFactor?: BlendFactor,
+    cullFace?: boolean,
+    cullFaceMode?: Face,
+    colorMask?: [boolean, boolean, boolean, boolean],
+    primitive?: Primitive
+  }
 
   export interface Pass {}
 
