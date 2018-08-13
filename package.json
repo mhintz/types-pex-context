@@ -1,6 +1,6 @@
 {
-  "name": "pex-context",
-  "version": "0.0.1",
+  "name": "@types/pex-context",
+  "version": "0.0.2",
   "description": "Types for pex",
   "types": "index.d.ts",
   "author": "Mark Hintz",

@@ -1,6 +1,6 @@
 declare module 'pex-context';
 
-declare namespace pex {
+declare namespace createContext {
 
   export interface Context {
     // GL enums
@@ -95,7 +95,7 @@ declare namespace pex {
     uniforms: { [key: string]: Uniform }
     attributes: { [key: string]: Attribute };
     attributesPerLocation: { [key: number]: Attribute };
-    setUniform(name: string, value: number | Array<number>): void;
+    setUniform(name: string, value: number | Array<number> | Float32Array): void;
   }
 
   export interface Buffer {
@@ -252,6 +252,6 @@ declare namespace pex {
 
 }
 
-declare function pex(opts: {} | HTMLCanvasElement): pex.Context;
+declare function createContext(opts: {} | HTMLCanvasElement): createContext.Context;
 
-export = pex;
+export = createContext;
