@@ -50,6 +50,7 @@ declare namespace createContext {
     readPixels(opts: { x: number, y: number, width: number, height: number }): Uint8Array;
     frame(fn: () => void): void;
     submit(cmd: Command, batches?: Array<Command> | Command, subCommand?: () => void): void;
+    dispose(res?: Resource): void;
   }
 
   export interface Command {
@@ -82,6 +83,8 @@ declare namespace createContext {
     location: number;
   }
 
+  export type UniformType = number | Array<number> | Float32Array;
+
   export interface Uniform {
     name: string;
     type: ShaderDataType;
@@ -95,7 +98,7 @@ declare namespace createContext {
     uniforms: { [key: string]: Uniform }
     attributes: { [key: string]: Attribute };
     attributesPerLocation: { [key: number]: Attribute };
-    setUniform(name: string, value: number | Array<number> | Float32Array): void;
+    setUniform(name: string, value: UniformType): void;
   }
 
   export interface Buffer {
@@ -103,6 +106,7 @@ declare namespace createContext {
     handle: WebGLBuffer;
     target: BufferTarget;
     usage: Usage;
+    length: number;
   }
 
   export interface Texture {}
