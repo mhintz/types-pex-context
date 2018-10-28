@@ -1,6 +1,20 @@
-declare module 'pex-context';
+declare module "pex-context";
 
 declare namespace createContext {
+  type GenericBufferOpts = {
+    data: ArrayBuffer | Array<number> | Array<Array<number>>;
+    type?: DataType.Float32 | DataType.Uint16 | DataType.Uint32;
+    usage?: Usage;
+  };
+  type VertexBufferOpts =
+    | GenericBufferOpts
+    | { data: Float32Array; usage?: Usage };
+  type IndexBufferOpts =
+    | GenericBufferOpts
+    | { data: Uint16Array; usage?: Usage }
+    | { data: Uint32Array; usage?: Usage }
+    | Uint16Array
+    | Uint32Array;
 
   export interface Context {
     // GL enums
@@ -22,8 +36,8 @@ declare namespace createContext {
     gl: WebGLRenderingContext;
     debugMode: boolean;
     capabilities: {
-      instancing: boolean,
-      maxColorAttachments: number,
+      instancing: boolean;
+      maxColorAttachments: number;
     };
     debugCommands: Array<Command>;
     resources: Array<Resource>;
@@ -39,17 +53,42 @@ declare namespace createContext {
     texture2D(opts: {}): Texture;
     textureCube(opts: {}): Texture;
     framebuffer(opts: {}): Framebuffer;
-    vertexBuffer(opts: { data: Float32Array, usage?: Usage } | Float32Array): Buffer;
-    indexBuffer(opts: { data: Uint16Array | Uint32Array, usage?: Usage } | Uint16Array | Uint32Array): Buffer;
-    program(opts: { vert: string, frag: string }): Program;
-    pipeline(opts: { vert?: string, frag?: string, program?: Program, depthWrite?: boolean, depthTest?: boolean, depthFunc?: DepthFunc, blend?: boolean, blendSrcRGBFactor?: BlendFactor, blendSrcAlphaFactor?: BlendFactor, blendDstRGBFactor?: BlendFactor, blendDstAlphaFactor?: BlendFactor, cullFace?: boolean, cullFaceMode?: Face, colorMask?: [boolean, boolean, boolean, boolean], primitive?: Primitive }): Pipeline;
+    vertexBuffer(opts: VertexBufferOpts): Buffer;
+    indexBuffer(opts: IndexBufferOpts): Buffer;
+    program(opts: { vert: string; frag: string }): Program;
+    pipeline(opts: {
+      vert?: string;
+      frag?: string;
+      program?: Program;
+      depthWrite?: boolean;
+      depthTest?: boolean;
+      depthFunc?: DepthFunc;
+      blend?: boolean;
+      blendSrcRGBFactor?: BlendFactor;
+      blendSrcAlphaFactor?: BlendFactor;
+      blendDstRGBFactor?: BlendFactor;
+      blendDstAlphaFactor?: BlendFactor;
+      cullFace?: boolean;
+      cullFaceMode?: Face;
+      colorMask?: [boolean, boolean, boolean, boolean];
+      primitive?: Primitive;
+    }): Pipeline;
     pass(opts: {}): Pass;
     query(opts: {}): Query;
     beginQuery(q: Query): void;
     endQuery(q: Query): void;
-    readPixels(opts: { x: number, y: number, width: number, height: number }): Uint8Array;
+    readPixels(opts: {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    }): Uint8Array;
     frame(fn: () => void): void;
-    submit(cmd: Command, batches?: Array<Command> | Command, subCommand?: () => void): void;
+    submit(
+      cmd: Command,
+      batches?: Array<Command> | Command,
+      subCommand?: () => void
+    ): void;
     dispose(res?: Resource): void;
   }
 
@@ -78,7 +117,12 @@ declare namespace createContext {
 
   export interface Attribute {
     name: string;
-    type: ShaderDataType.FLOAT | ShaderDataType.FLOAT_VEC2 | ShaderDataType.FLOAT_VEC3 | ShaderDataType.FLOAT_VEC4 | ShaderDataType.FLOAT_MAT4;
+    type:
+      | ShaderDataType.FLOAT
+      | ShaderDataType.FLOAT_VEC2
+      | ShaderDataType.FLOAT_VEC3
+      | ShaderDataType.FLOAT_VEC4
+      | ShaderDataType.FLOAT_MAT4;
     size: number;
     location: number;
   }
@@ -93,16 +137,16 @@ declare namespace createContext {
   }
 
   export interface Program {
-    class: 'program';
+    class: "program";
     handle: WebGLProgram;
-    uniforms: { [key: string]: Uniform }
+    uniforms: { [key: string]: Uniform };
     attributes: { [key: string]: Attribute };
     attributesPerLocation: { [key: number]: Attribute };
     setUniform(name: string, value: UniformType): void;
   }
 
   export interface Buffer {
-    class: 'vertexBuffer' | 'indexBuffer';
+    class: "vertexBuffer" | "indexBuffer";
     handle: WebGLBuffer;
     target: BufferTarget;
     usage: Usage;
@@ -112,28 +156,35 @@ declare namespace createContext {
   export interface Texture {}
 
   export interface Pipeline {
-    vert?: string,
-    frag?: string,
-    program?: Program,
-    depthWrite?: boolean,
-    depthTest?: boolean,
-    depthFunc?: DepthFunc,
-    blend?: boolean,
-    blendSrcRGBFactor?: BlendFactor,
-    blendSrcAlphaFactor?: BlendFactor,
-    blendDstRGBFactor?: BlendFactor,
-    blendDstAlphaFactor?: BlendFactor,
-    cullFace?: boolean,
-    cullFaceMode?: Face,
-    colorMask?: [boolean, boolean, boolean, boolean],
-    primitive?: Primitive
+    vert?: string;
+    frag?: string;
+    program?: Program;
+    depthWrite?: boolean;
+    depthTest?: boolean;
+    depthFunc?: DepthFunc;
+    blend?: boolean;
+    blendSrcRGBFactor?: BlendFactor;
+    blendSrcAlphaFactor?: BlendFactor;
+    blendDstRGBFactor?: BlendFactor;
+    blendDstAlphaFactor?: BlendFactor;
+    cullFace?: boolean;
+    cullFaceMode?: Face;
+    colorMask?: [boolean, boolean, boolean, boolean];
+    primitive?: Primitive;
   }
 
   export interface Pass {}
 
   export interface Query {}
 
-  type Resource = Framebuffer | Program | Buffer | Texture | Pipeline | Pass | Query;
+  type Resource =
+    | Framebuffer
+    | Program
+    | Buffer
+    | Texture
+    | Pipeline
+    | Pass
+    | Query;
 
   export enum BlendFactor {
     One = 1,
@@ -145,7 +196,7 @@ declare namespace createContext {
     DstAlpha = 772,
     DstColor = 774,
     OneMinusDstAlpha = 773,
-    OneMinusDstColor = 775,
+    OneMinusDstColor = 775
   }
 
   export enum CubemapFace {
@@ -154,7 +205,7 @@ declare namespace createContext {
     NegativeZ = 34074,
     PositiveX = 34069,
     PositiveY = 34071,
-    PositiveZ = 34073,
+    PositiveZ = 34073
   }
 
   export enum DepthFunc {
@@ -165,14 +216,14 @@ declare namespace createContext {
     Less = 513,
     LessEqual = 515,
     Never = 512,
-    NotEqual = 517,
+    NotEqual = 517
   }
 
   export enum DataType {
     Float32 = 5126,
     Uint8 = 5121,
     Uint16 = 5123,
-    Uint32 = 5125,
+    Uint32 = 5125
   }
 
   export enum ShaderDataType {
@@ -186,13 +237,13 @@ declare namespace createContext {
     FLOAT_MAT3 = 35675,
     FLOAT_MAT4 = 35676,
     SAMPLER_2D = 35678,
-    SAMPLER_CUBE = 35680,
+    SAMPLER_CUBE = 35680
   }
 
   export enum Face {
     Back = 1029,
     Front = 1028,
-    FrontAndBack = 1032,
+    FrontAndBack = 1032
   }
 
   export enum Filter {
@@ -201,16 +252,16 @@ declare namespace createContext {
     LinearMipmapNearest = 9985,
     Nearest = 9728,
     NearestMipmapLinear = 9986,
-    NearestMipmapNearest = 9984,
+    NearestMipmapNearest = 9984
   }
 
   export enum PixelFormat {
-    RGBA8 = 'rgba8', // gl.RGBA + gl.UNSIGNED_BYTE
-    RGBA32F = 'rgba32f', // gl.RGBA + gl.FLOAT
-    RGBA16F = 'rgba16f', // gl.RGBA + gl.HALF_FLOAT
-    R32F = 'r32f', // gl.ALPHA + gl.FLOAT
-    R16F = 'r16f', // gl.ALPHA + gl.HALF_FLOAT
-    Depth = 'depth' // gl.DEPTH_COMPONENT
+    RGBA8 = "rgba8", // gl.RGBA + gl.UNSIGNED_BYTE
+    RGBA32F = "rgba32f", // gl.RGBA + gl.FLOAT
+    RGBA16F = "rgba16f", // gl.RGBA + gl.HALF_FLOAT
+    R32F = "r32f", // gl.ALPHA + gl.FLOAT
+    R16F = "r16f", // gl.ALPHA + gl.HALF_FLOAT
+    Depth = "depth" // gl.DEPTH_COMPONENT
   }
 
   export enum Encoding {
@@ -225,18 +276,18 @@ declare namespace createContext {
     Lines = 1,
     Points = 0,
     TriangleStrip = 5,
-    Triangles = 4,
+    Triangles = 4
   }
 
   export enum Usage {
     DynamicDraw = 35048,
     StaticDraw = 35044,
-    StreamDraw = 35040,
+    StreamDraw = 35040
   }
 
   export enum Wrap {
     ClampToEdge = 33071,
-    Repeat = 10497,
+    Repeat = 10497
   }
 
   export enum QueryTarget {
@@ -244,18 +295,19 @@ declare namespace createContext {
   }
 
   export enum QueryState {
-    Ready = 'ready',
-    Active = 'active',
-    Pending = 'pending'
+    Ready = "ready",
+    Active = "active",
+    Pending = "pending"
   }
 
   export enum BufferTarget {
     ARRAY_BUFFER = 34962,
-    ELEMENT_ARRAY_BUFFER = 34963,
+    ELEMENT_ARRAY_BUFFER = 34963
   }
-
 }
 
-declare function createContext(opts: {} | HTMLCanvasElement): createContext.Context;
+declare function createContext(
+  opts: {} | HTMLCanvasElement
+): createContext.Context;
 
 export = createContext;
