@@ -8,7 +8,8 @@ declare namespace createContext {
   };
   type VertexBufferOpts =
     | GenericBufferOpts
-    | { data: Float32Array; usage?: Usage };
+    | { data: Float32Array; usage?: Usage }
+    | Float32Array;
   type IndexBufferOpts =
     | GenericBufferOpts
     | { data: Uint16Array; usage?: Usage }

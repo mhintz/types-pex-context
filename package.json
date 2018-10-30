@@ -4,5 +4,8 @@
   "description": "Types for pex",
   "types": "index.d.ts",
   "author": "Mark Hintz",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "format": "prettier --write index.d.ts"
+  }
 }
