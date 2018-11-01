@@ -5,6 +5,7 @@
   "types": "index.d.ts",
   "author": "Mark Hintz",
   "license": "MIT",
+  "private": false,
   "scripts": {
     "format": "prettier --write index.d.ts"
   }
