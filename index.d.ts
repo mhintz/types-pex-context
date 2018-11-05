@@ -3,12 +3,18 @@ declare module "pex-context";
 declare namespace createContext {
   type GenericBufferOpts = {
     data: ArrayBuffer | Array<number> | Array<Array<number>>;
-    type?: DataType.Float32 | DataType.Uint16 | DataType.Uint32;
+    type?:
+      | DataType.Float32
+      | DataType.Uint8
+      | DataType.Uint16
+      | DataType.Uint32;
     usage?: Usage;
   };
   type VertexBufferOpts =
     | GenericBufferOpts
     | { data: Float32Array; usage?: Usage }
+    | { data: Uint8Array; usage?: Usage }
+    | Uint8Array
     | Float32Array;
   type IndexBufferOpts =
     | GenericBufferOpts
